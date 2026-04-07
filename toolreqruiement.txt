@@ -1,0 +1,7 @@
+WSL
+MSYS2
+Xorriso
+Cross-compilation tools (GCC, Binutils, etc.)
+QEMU
+VirtualBox
+nasm

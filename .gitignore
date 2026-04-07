@@ -1,0 +1,33 @@
+# ============================================================
+# LittleOS Gajah PHP- .gitignore
+# ============================================================
+
+# File hasil build
+bin/
+obj/
+iso_root/
+
+# File ISO
+*.iso
+
+# Limine bootloader (diunduh saat build)
+limine/
+
+# File editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# File OS
+Thumbs.db
+.DS_Store
+
+# File Assets (design source files, large binaries)
+assets/
+
+# Screenshot / debug test files
+test_screenshot*.png
+*.log
+build_output.txt
