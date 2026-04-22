@@ -274,11 +274,6 @@ cmake --build build
 
 Atau cukup menggunakan `./compile.sh`.
 
-```
-```
-
-```
-
 ---
 
 ## How to Run
@@ -294,7 +289,6 @@ Atau cukup menggunakan `./compile.sh`.
 3. Settings > Display > Video Memory: 128 MB
 4. Start VM
 
-```
 ```
 
 - Alternatif Windows: Gunakan `run_virtualbox.bat`.
