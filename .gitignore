@@ -12,6 +12,7 @@
 
 # Limine bootloader (diunduh saat build)
 limine/
+Limine/
 
 # File editor
 *.swp
@@ -19,13 +20,15 @@ limine/
 *~
 .vscode/
 .idea/
+.cache/
+# test/
 
 # File OS
 Thumbs.db
 .DS_Store
 
 # File Assets (design source files, large binaries)
-assets/
+#assets/
 
 # Screenshot / debug test files
 test_screenshot*.png

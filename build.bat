@@ -9,7 +9,7 @@ REM PRASYARAT:
 REM   1. Cross-compiler x86_64-elf-gcc (BUKAN MinGW!)
 REM      Download dari: https://github.com/lordmilko/i686-elf-tools/releases
 REM      atau: https://wiki.osdev.org/GCC_Cross-Compiler
-REM   2. NASM assembler (opsional, belum dipakai)
+REM   2. NASM assembler
 REM   3. Git (untuk mengunduh Limine)
 REM   4. xorriso (untuk membuat ISO)
 REM      Bisa install via: scoop install xorriso
