@@ -2,12 +2,13 @@
 OUTPUT_FORMAT(elf64-x86-64)
 
 /* Entry point kernel adalah fungsi kmain */
-ENTRY(kmain)
+ENTRY(_start)
 
 /* Definisi program headers */
 PHDRS
 {
-    text PT_LOAD FLAGS(7);  /* RWX - readable, writable, executable */
+    text PT_LOAD FLAGS(5);  /* R + X - readable, writable, executable */
+    data PT_LOAD FLAGS(6);  /* R + W */
 }
 
 SECTIONS
@@ -22,29 +23,22 @@ SECTIONS
         KEEP(*(.limine_requests_end))
     } :text
 
-    /* Text section */
     . = ALIGN(4096);
-    .text : {
-        *(.text .text.*)
-    } :text
+    .text : { *(.text .text.*) } :text
 
-    /* Read-only data */
     . = ALIGN(4096);
-    .rodata : {
-        *(.rodata .rodata.*)
-    } :text
+    .rodata : { *(.rodata .rodata.*) } :text
 
-    /* Data */
     . = ALIGN(4096);
-    .data : {
-        *(.data .data.*)
-    } :text
-
-    /* BSS */
-    .bss : {
-        *(.bss .bss.*)
-        *(COMMON)
-    } :text
+    .data : { *(.data .data.*) } :data
+    
+    . = ALIGN(4096);
+    .bss : { 
+      __bss_start = .;
+      *(.bss .bss.*)
+      *(COMMON)
+      __bss_end = .;
+      } :data
 
     /* Discard unused sections */
     /DISCARD/ : {

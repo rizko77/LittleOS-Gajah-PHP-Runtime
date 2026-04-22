@@ -1,5 +1,25 @@
 # LittleOS Gajah PHP
 
+<!--toc:start-->
+- [LittleOS Gajah PHP](#littleos-gajah-php)
+  - [System Information Overview](#system-information-overview)
+  - [System Feature Now](#system-feature-now)
+    - [Desktop & GUI](#desktop-gui)
+    - [Built-in Applications (Not fully functional yet.)](#built-in-applications-not-fully-functional-yet)
+    - [PHP 8.2 Runtime (53 Built-in Functions)](#php-82-runtime-53-built-in-functions)
+  - [Project Structure](#project-structure)
+  - [Prerequisite](#prerequisite)
+    - [Windows](#windows)
+    - [Linux / WSL](#linux-wsl)
+  - [How to Build](#how-to-build)
+    - [Windows (CMD/PowerShell)](#windows-cmdpowershell)
+    - [Linux/WSL](#linuxwsl)
+    - [QEMU](#qemu)
+  - [Architecture Overview](#architecture-overview)
+  - [License](#license)
+  - [❤️ Wallpaper Credits](#️-wallpaper-credits)
+<!--toc:end-->
+
 > **Experimental Opensource Operating System — PHP 8.2 Bare Metal Runtime**
 
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue)
@@ -43,6 +63,7 @@ Created by Indonesian developers for the global open source and educational comm
 ## System Feature Now
 
 ### Desktop & GUI
+
 - Full graphical desktop with animated boot splash screen
 - Double-buffered rendering (no screen tearing)
 - Desktop Wallpaper with artwork rendered via pixel form Pixiv <https://i.pximg.net/img-master/img/2022/09/28/00/00/25/101532845_p0_master1200.jpg>
@@ -68,17 +89,20 @@ Created by Indonesian developers for the global open source and educational comm
 ### PHP 8.2 Runtime (53 Built-in Functions)
 
 **String**
+
 ```
 strlen()  substr()  strtoupper()  strtolower()
 str_repeat()  str_contains()  intval()  strval()
 ```
 
 **Array & Core**
+
 ```
 count()  isset()  print()  var_dump()
 ```
 
 **Kernel / System**
+
 ```
 kernel_version()  kernel_name()  kernel_arch()
 memory_total()  memory_free()  memory_used()
@@ -86,12 +110,14 @@ uptime()  uptime_ms()
 ```
 
 **Console**
+
 ```
 console_clear()  console_set_color()  console_cols()  console_rows()
 readline()  sleep()
 ```
 
 **Graphics (Framebuffer)**
+
 ```
 screen_width()  screen_height()
 draw_pixel()  fill_rect()  draw_rect()  fill_rounded_rect()
@@ -99,18 +125,21 @@ draw_text()  draw_line()  fill_circle()
 ```
 
 **Input**
+
 ```
 mouse_x()  mouse_y()  mouse_clicked()  mouse_event()
 keyboard_read()  keyboard_has_input()
 ```
 
 **RTC (Real-Time Clock)**
+
 ```
 rtc_hour()  rtc_minute()  rtc_second()
 rtc_day()  rtc_month()  rtc_year()
 ```
 
 **Desktop / Window Manager**
+
 ```
 desktop_init()  desktop_create_window()  desktop_close_window()
 desktop_set_text()  desktop_render()  desktop_poll_events()
@@ -153,33 +182,49 @@ LittleOS - PHP Runtime/
 
 ---
 
-## Build Requirements
+## Prerequisite
 
 | Tool | Purpose |
-|---|---|
-| `x86_64-elf-g++` | C++17 freestanding cross-compiler |
-| `x86_64-elf-ld` | Cross-linker |
+| --- | --- |
+| `x86_64-elf-g++` / clang (Linux) | C++17 freestanding cross-compiler |
+| `x86_64-elf-ld` / lld (Linux) | Cross-linker |
 | `xorriso` | ISO 9660 image creator |
 | `limine` | Bootloader (download separately) |
 | VirtualBox / QEMU | Testing the ISO |
+| git | Clone repo |
+| Make & CMake | Build system |
+| nasm | Assembly compiler |
+| Ninja | Build generator for CMake |
 
 ### Windows
+
 1. Download the `x86_64-elf` cross-compiler from [OSDev GCC Cross-Compiler](https://wiki.osdev.org/GCC_Cross-Compiler) or [lordmilko/i686-elf-tools](https://github.com/lordmilko/i686-elf-tools)
 2. Install xorriso via [MSYS2](https://www.msys2.org/): `pacman -S xorriso`
-3. Download [Limine releases](https://github.com/limine-bootloader/limine/releases) and extract to `limine/`
 
-### Linux / macOS
+### Linux / WSL
+
 ```bash
+# Arch
+sudo pacman -Sy
+sudo pacman -S clang lld nasm cmake virtualbox xorriso git ninja make
+
 # Ubuntu/Debian
-sudo apt install g++ xorriso mtools
+sudo apt update
+sudo apt install clang lld nasm cmake virtualbox xorriso git ninja make
 # Build or download x86_64-elf cross-compiler, see OSDev wiki
 ```
+
+Keduanya kemudian download Limine dengan:
+
+- `git clone -b v11.x-binary --single-branch https://github.com/Limine-Bootloader/Limine.git limine`
+
+See [Limine Bootloader Binary](https://github.com/Limine-Bootloader/Limine/tree/v11.x-binary#)
 
 ---
 
 ## How to Build
 
-### Windows (CMD)
+### Windows (CMD/PowerShell)
 
 Gunakan `build.bat` yang sudah disediakan:
 
@@ -195,36 +240,43 @@ build.bat clean
 ```
 
 Prerequisite yang harus tersedia:
+
 - **Cross-compiler** `x86_64-elf-g++` di `C:\cross\bin\` (otomatis dideteksi oleh script)
-  Download: https://github.com/lordmilko/i686-elf-tools/releases
+  Download: <https://github.com/lordmilko/i686-elf-tools/releases>
 - **xorriso** — install via `scoop install xorriso` atau `choco install xorriso`
 - **git** — diperlukan untuk mengunduh Limine saat pertama kali build ISO
 
 > **Catatan:** Script menggunakan `x86_64-elf-objcopy` untuk meng-embed asset biner
 > (mascot, wallpaper, menu icon) ke dalam kernel secara otomatis.
 
-### Linux / WSL (Bash)
+### Linux/WSL
 
 Gunakan `build_kernel.sh` yang sudah disediakan:
 
 ```bash
 # Beri izin eksekusi (sekali saja)
-chmod +x build_kernel.sh
+chmod +x compile.sh
 
 # Build kernel saja
 ./build_kernel.sh
-
-# Build kernel + buat ISO bootable
-./build_kernel.sh iso
 
 # Hapus semua file build
 ./build_kernel.sh clean
 ```
 
-Install prerequisite di Ubuntu/Debian (WSL):
+Jika memakai CMake, jalankan perintah berikut:
 
-```bash
-sudo apt install gcc-x86-64-linux-gnu binutils-x86-64-linux-gnu xorriso git
+```
+CXX=clang++ CC=clang cmake -B build -S . -G "Ninja"
+
+cmake --build build
+```
+
+Atau cukup menggunakan `./compile.sh`.
+
+```
+```
+
 ```
 
 ---
@@ -233,6 +285,7 @@ sudo apt install gcc-x86-64-linux-gnu binutils-x86-64-linux-gnu xorriso git
 
 ### VirtualBox
 ```
+
 1. Create a new VM:
    - Type: Other  /  Version: Other (64-bit)
    - RAM: 256 MB minimum
@@ -240,18 +293,24 @@ sudo apt install gcc-x86-64-linux-gnu binutils-x86-64-linux-gnu xorriso git
 2. Settings > Storage > Add ISO: LittleOS_Gajah_x86_PHP_8.2_amd_64.iso
 3. Settings > Display > Video Memory: 128 MB
 4. Start VM
+
+```
 ```
 
-Or use the provided script on Windows:
-```bat
-run_virtualbox.bat
-```
+- Alternatif Windows: Gunakan `run_virtualbox.bat`.
+- Alternatif Linux: Gunakan `./compile.sh`.
 
 ### QEMU
+
 ```bash
 qemu-system-x86_64 -cdrom LittleOS_Gajah_x86_PHP_8.2_amd_64.iso \
-  -m 256M -vga std -serial stdio
+  -m 256M -vga qxl -serial stdio
 ```
+
+Jika Anda menggunakan compositor wayland dan mengalami masalah dengan kursor, tambahkan argumen `-display sdl`.
+
+Alternatif Linux: Gunakan `compile.sh` untuk otomatis konfigurasi cmake, build, dan run.
+> `chmod +x ./compile.sh` Jangan lupa.
 
 ---
 
@@ -263,7 +322,7 @@ qemu-system-x86_64 -cdrom LittleOS_Gajah_x86_PHP_8.2_amd_64.iso \
 │     desktop.php  apps  window manager   │
 ├─────────────────────────────────────────┤
 │         PHP 8.2 Interpreter             │  ← php_runtime.cpp (C++17)
-│   Lexer → Parser → AST → Evaluator     │
+│   Lexer → Parser → AST → Evaluator      │
 │   53 built-in functions  Value pool     │
 ├─────────────────────────────────────────┤
 │    Hardware Abstraction Layer (HAL)     │  ← hal.hpp / C++ freestanding
